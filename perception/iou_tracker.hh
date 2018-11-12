@@ -1,3 +1,8 @@
+//
+// IOU Tracker as presented in
+// http://elvera.nue.tu-berlin.de/files/1517Bochinski2017.pdf
+//
+
 #pragma once
 
 #include "perception_objects.hh"

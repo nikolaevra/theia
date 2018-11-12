@@ -1,7 +1,5 @@
 cc_binary(
-    name = "graph_loader",
-    srcs = ["graph_loader.cc"],
-    deps=[
-        @tensorflow
-    ]
+    name = "graph-loader",
+    srcs = ["graph_loader.cc",],
+    deps = ["@tensorflow//tensorflow:libtensorflow.so",]
 )

@@ -2,7 +2,6 @@
 
 namespace Perception {
     class Detection {
-        int id;
         int _xmin;
         int _ymin;
         int _xmax;
@@ -40,7 +39,9 @@ namespace Perception {
     class Track {
         std::vector<Detection> _detections;
         float _timestamp;
+        int track_id;
 
+    public:
         Track(std::vector<Detection> detections, float timestamp): _detections{detections}, _timestamp{timestamp};
         ~Track() = default;
     };
