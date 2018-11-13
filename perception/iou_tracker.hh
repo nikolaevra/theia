@@ -6,6 +6,7 @@
 #pragma once
 
 #include "perception_objects.hh"
+#include "utils.hh"
 #include <iostream>
 
 namespace Perception {
@@ -15,7 +16,9 @@ class Tracker {
 
   ~Tracker();
 
-  std::vector<Track> track_iou(std::vector<Detection> detections, double sigma_l,
-                               double sigma_h, double sigma_iou, int t_min);
+  std::vector<Track>
+  track_iou(const std::vector<std::vector<Detection>> &detections,
+            const double sigma_l, const double sigma_h, const double sigma_iou,
+            const int t_min);
 };
 } // namespace Perception
