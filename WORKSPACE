@@ -1,4 +1,10 @@
-local_repository(
+git_repository(
     name = "tensorflow",
-    path = "/home/ruslan.nikolaev/dev/theia/third-party/tensorflow",
+    remote = "https://github.com/tensorflow/tensorflow.git",
+    tag = "v1.12.0",
 )
+
+## local_repository(
+##     name = "tensorflow",
+##     path = "tf/tensorflow",
+## )
