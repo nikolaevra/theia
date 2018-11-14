@@ -1,90 +1,69 @@
+#pragma once
+
+#include <ctime>
 #include "iou_tracker.hh"
 
 namespace Perception {
-Tracker::Tracker() { std::cout << "Initializing Tracker" << std::endl; }
+Tracker::Tracker(const double sigma_l, const double sigma_h, const double sigma_iou, const int t_min):
+    sigma_l{sigma_l}, sigma_h{sigma_h}, sigma_iou{sigma_iou},
+    t_min{t_min}, active_tracks{std::vector<Track>{}}, finished_tracks{std::vector<Track>{}}
+{
+  std::cout << "Initializing Tracker" << std::endl;
+}
 
 Tracker::~Tracker() { std::cout << "Killing Tracker" << std::endl; }
 
-// TODO: redefine track_iou to process one frame at a time
-std::vector<Track>
-track_iou(const std::vector<std::vector<Detection>> &detections,
-          const double sigma_l, const double sigma_h, const double sigma_iou,
-          const int t_min) {
-  std::cout << "track_iou function" << std::endl;
-  std::vector<Track> active_tracks;
-  std::vector<Track> finished_tracks;
-  int frame = 0;
-  int track_id = 1; // Starting ID for the Tracks
-  int index;        // Index of the box with the highest IOU
-  bool updated;     // Whether if a track was updated or not
-  int numFrames = detections.size();
+void Tracker::track_iou_per_frame(std::vector<Detection> &detections)
+{
+  // Index of the box with the highest IOU
+  int index;
+  // Whether if a track was updated or not
+  bool updated = false;
 
-  std::cout << "Num of frames > " << numFrames << std::endl;
+  // Update active tracks
+  for (int i = 0; i < this->active_tracks.size(); i++) {
+    Track track = this->active_tracks[i];
 
-  for (frame; frame < numFrames; frame++) {
-    std::vector<Perception::Detection> frameBoxes = detections[frame];
+    // Get the index of the detection with the highest IOU.
+    // Compares the last detection in the track with current detections
+    index = highestIOU(track.boxes.back(), detections);
 
-    /// Update active tracks
-    for (int i = 0; i < active_tracks.size(); i++) {
-      Track track = active_tracks[i];
-      updated = false;
-      // Get the index of the detection with the highest IOU
-      index = highestIOU(track.boxes.back(), frameBoxes);
-      // Check is above the IOU threshold
-      //			std::cout << " --- IOU Best match = " <<
-      //intersectionOverUnion(track.boxes.back(), frameBoxes[index]) <<
-      //std::endl;
-      if (index != -1 &&
-          intersectionOverUnion(track.boxes.back(), frameBoxes[index]) >=
-              sigma_iou) {
-        track.boxes.push_back(frameBoxes[index]);
+    if (index != -1 && intersectionOverUnion(track.boxes.back(), detections[index]) >= this->sigma_iou) {
+      // If the box is good match for the track, then add it to the track.
+      track.boxes.push_back(detections[index]);
 
-        if (track.max_score < frameBoxes[index].score)
-          track.max_score = frameBoxes[index].score;
-        // Remove the best matching detection from the frame detections
-        frameBoxes.erase(frameBoxes.begin() + index);
-        active_tracks[i] = track;
-        updated = true;
-      }
+      // If we found the max iou box of all time for the track, then update track's max iou score
+      if (track.max_score < detections[index].score)
+        track.max_score = detections[index].score;
 
-      // If the track was not updated...
-      if (!updated) {
-        // Check the conditions to finish the track
-        if (track.max_score >= sigma_h && track.boxes.size() >= t_min)
-          finished_tracks.push_back(track);
-
-        active_tracks.erase(active_tracks.begin() + i);
-        // Workaround used because of the previous line "erase" call
-        i--;
-      }
-
-    } // End for active tracks
-
-    /// Create new tracks
-    for (auto box : frameBoxes) {
-      std::vector<Perception::Detection> b;
-      b.push_back(box);
-      // Track_id is set to 0 because we dont know if this track will
-      // "survive" or not
-      Track t = {b, box.score, frame, 0};
-      active_tracks.push_back(t);
+      // Remove the best matching detection from the frame detections
+      detections.erase(detections.begin() + index);
+      this->active_tracks[i] = track;
+      updated = true;
     }
-    //		std::cout << "I tracked frame " << frame << std::endl;
-  } // End of frames
 
-  /// Finish the remaining tracks
-  for (auto track : active_tracks)
-    if (track.max_score >= sigma_h && track.boxes.size() >= t_min)
-      finished_tracks.push_back(track);
-  std::cout << "Num of finished tracks > " << finished_tracks.size()
-            << std::endl;
+    // If the track was not updated
+    if (!updated) {
+      // Check the conditions to finish the track
+      if (track.max_score >= this->sigma_h && track.boxes.size() >= this->t_min)
+        this->finished_tracks.push_back(track);
 
-  /// Enumerate only the remaining tracks aka the ones finished
-  for (int i = 0; i < finished_tracks.size(); i++) {
-    finished_tracks[i].id = track_id;
-    track_id++;
+      this->active_tracks.erase(this->active_tracks.begin() + i);
+      // Need to decrement i because of the previous line "erase" call
+      i--;
+    }
+
+  } // End for active tracks
+
+  // Create new tracks
+  for (auto box : detections) {
+    std::vector<Detection> b;
+    b.push_back(box);
+    // Track_id is set to 0 because we don't know if this track will "survive" or not
+    std::time_t timestamp = std::time(nullptr);
+    Track t = {b, box.score, timestamp, this->track_id};
+    this->track_id ++;
+    this->active_tracks.push_back(t);
   }
-
-  return finished_tracks;
 }
 }

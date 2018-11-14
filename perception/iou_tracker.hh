@@ -12,13 +12,21 @@
 namespace Perception {
 
 class Tracker {
-  Tracker();
+ public:
+  Tracker(const double sigma_l, const double sigma_h, const double sigma_iou, const int t_min);
 
   ~Tracker();
 
-  std::vector<Track>
-  track_iou(const std::vector<std::vector<Detection>> &detections,
-            const double sigma_l, const double sigma_h, const double sigma_iou,
-            const int t_min);
+  void track_iou_per_frame(std::vector<Detection> &detections);
+
+ private:
+  std::vector<Track> active_tracks;
+  std::vector<Track> finished_tracks;
+
+  const double sigma_l;
+  const double sigma_h;
+  const double sigma_iou;
+  const int t_min;
+  unsigned int track_id = 1;
 };
 } // namespace Perception

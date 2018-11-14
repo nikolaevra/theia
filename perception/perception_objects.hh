@@ -1,6 +1,7 @@
 #pragma once
 
 #include <vector>
+#include <ctime>
 
 namespace Perception {
 
@@ -18,10 +19,14 @@ struct Detection {
 };
 
 struct Track {
+  // List storing all the detections.
   std::vector<Detection> boxes;
+  // Max score even encountered in the track.
   float max_score;
-  int start_frame;
-  int id;
+  // Timestamp from the moment track was created.
+  std::time_t start_frame;
+  // Track unique id number.
+  unsigned int id;
 };
 
 } // namespace Perception

@@ -1,4 +1,7 @@
+#pragma once
+
 #include "utils.hh"
+#include <algorithm>
 
 inline float intersectionOverUnion(Perception::Detection box1,
                                    Perception::Detection box2) {

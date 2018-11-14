@@ -1,3 +1,5 @@
+#pragma once
+
 #include <vector>
 #include <cublas_v2.h>
 #include "tensorflow/cc/client/client_session.h"
