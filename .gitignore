@@ -8,7 +8,7 @@ models/*
 bazel-*
 
 # Ignore all the third-party files
-third-party
+third-party/*
 
 ###########################    C++ files   ###########################
 # Prerequisites
