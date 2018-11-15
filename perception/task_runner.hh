@@ -1,0 +1,1 @@
+/// Will own detector and tracker and will manage all subscriptions between them.

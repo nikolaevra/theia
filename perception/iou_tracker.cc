@@ -4,14 +4,14 @@
 #include "iou_tracker.hh"
 
 namespace Perception {
+
 Tracker::Tracker(const double sigma_l, const double sigma_h, const double sigma_iou, const int t_min):
-    sigma_l{sigma_l}, sigma_h{sigma_h}, sigma_iou{sigma_iou},
-    t_min{t_min}, active_tracks{std::vector<Track>{}}, finished_tracks{std::vector<Track>{}}
+    sigma_l{sigma_l}, sigma_h{sigma_h}, sigma_iou{sigma_iou}, t_min{t_min},
+    active_tracks{std::vector<Track>{}}, finished_tracks{std::vector<Track>{}}
 {
+
   std::cout << "Initializing Tracker" << std::endl;
 }
-
-Tracker::~Tracker() { std::cout << "Killing Tracker" << std::endl; }
 
 void Tracker::track_iou_per_frame(std::vector<Detection> &detections)
 {
@@ -66,4 +66,16 @@ void Tracker::track_iou_per_frame(std::vector<Detection> &detections)
     this->active_tracks.push_back(t);
   }
 }
+
+// TODO: Not implemented
+void Tracker::notify(Comms::Publisher &pub)
+{
+
 }
+
+Tracker::~Tracker()
+{
+  std::cout << "Killing Tracker" << std::endl;
+}
+
+} // namespace Perception
