@@ -1,0 +1,6 @@
+[submodule "third-party/tensorflow"]
+	path = third-party/tensorflow
+	url = https://github.com/tensorflow/tensorflow.git
+[submodule "experiments/Detectors"]
+	path = experiments/Detectors
+	url = https://github.com/nikolaevra/Detectors.git
