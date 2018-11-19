@@ -1,10 +1,18 @@
+//
+// Created by ruslan.nikolaev on 11/18/18.
+//
+
 #pragma once
 
-#include "publisher.hh"
+/// Forward declare to avoid cyclical dependencies.
+namespace Comms{
+    class Publisher;
+}
 
 namespace Comms {
+
 class Subscriber {
- public:
+public:
   /// Constructor.
   Subscriber() = default;
 

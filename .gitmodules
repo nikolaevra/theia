@@ -4,3 +4,6 @@
 [submodule "experiments/Detectors"]
 	path = experiments/Detectors
 	url = https://github.com/nikolaevra/Detectors.git
+[submodule "third-party/opencv"]
+	path = third-party/opencv
+	url = https://github.com/opencv/opencv.git

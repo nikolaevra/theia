@@ -1,11 +1,13 @@
-#pragma once
+//
+// Created by ruslan.nikolaev on 11/18/18.
+//
 
-#include "detector.hh"
+#include "perception/detector.hh"
 
-Perception::Detector::Detector() {
+namespace Perception {
+
+void Detector::notify(Comms::Publisher &pub) {
 
 }
 
-Perception::Detector::~Detector() {
-
-}
+} // namespace Perception

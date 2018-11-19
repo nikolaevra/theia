@@ -1,21 +1,24 @@
 //
+// Created by ruslan.nikolaev on 11/18/18.
+//
 // IOU Tracker as presented in
 // http://elvera.nue.tu-berlin.de/files/1517Bochinski2017.pdf
 //
 
 #pragma once
 
-#include "perception_objects.hh"
-#include "utils.hh"
-#include "subscriber.hh"
 #include <iostream>
+
+#include "perception/perception_objects.hh"
+#include "perception/subscriber.hh"
+#include "perception/utils.hh"
 
 namespace Perception {
 
 class Tracker: public Comms::Subscriber {
- public:
+public:
   /// Constructor.
-  Tracker(const double sigma_l, const double sigma_h, const double sigma_iou, const int t_min);
+  Tracker(double sigma_l, double sigma_h, double sigma_iou, int t_min);
 
   /// Main method to track the object from frame to frame. Given a list of
   /// new detections, the tracker updates all tracks that are active and
@@ -26,9 +29,9 @@ class Tracker: public Comms::Subscriber {
   void notify(Comms::Publisher &pub) override;
 
   /// Destructor.
-  ~Tracker() override;
+  ~Tracker() override = default;
 
- private:
+private:
   /// Store all the active tracks that are happening in the video right now.
   std::vector<Track> active_tracks;
 

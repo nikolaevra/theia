@@ -82,3 +82,11 @@ new_http_archive(
         "http://download.tensorflow.org/models/speech_commands_v0.01.zip",
     ],
 )
+
+# OpenCV. Make sure that open cv is installed first.
+# https://stackoverflow.com/questions/34984290/building-opencv-code-using-bazel
+new_local_repository(
+    name = "opencv",
+    path = "third-party/opencv/build",
+    build_file = "opencv.BUILD",
+)

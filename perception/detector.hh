@@ -1,16 +1,23 @@
+//
+// Created by ruslan.nikolaev on 11/18/18.
+//
+
 #pragma once
 
-#include "publisher.hh"
+#include "perception/subscriber.hh"
+#include "perception/publisher.hh"
 
-namespace Perception
-{
-class Detector: public Comms::Publisher
-{
- public:
+namespace Perception {
+
+class Detector : public Comms::Publisher, public Comms::Subscriber {
+public:
   /// Constructor.
-  Detector();
+  Detector() = default;
 
   /// Destructor.
-  ~Detector() override;
+  ~Detector() override = default;
+
+  void notify(Comms::Publisher &pub) override;
 };
+
 } // namespace Perception

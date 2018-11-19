@@ -1,9 +1,8 @@
-#pragma once
-
-#include "utils.hh"
 #include <algorithm>
 
-inline float intersectionOverUnion(Perception::Detection box1,
+#include "perception/utils.hh"
+
+float intersectionOverUnion(Perception::Detection box1,
                                    Perception::Detection box2) {
   float minx1 = box1.x;
   float maxx1 = box1.x + box1.w;
@@ -30,7 +29,7 @@ inline float intersectionOverUnion(Perception::Detection box1,
   //	return 0.0f;
 }
 
-inline int highestIOU(Perception::Detection box,
+int highestIOU(Perception::Detection box,
                       std::vector<Perception::Detection> boxes) {
   float iou = 0, highest = 0;
   int index = -1;
